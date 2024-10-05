@@ -131,3 +131,105 @@ class Book(ABC):
     @abstractmethod
     def bookmark_page(self):
         pass
+
+    def save_to_json(self, filename):
+        data = {
+            'title': self.title,
+            'author': self.author,
+            'isbn': self.isbn,
+            'page_count': self.page
+        }
+        with open(filename, 'w') as f:
+            json.dump(data, f, indent=4)
+        return f"Ma'lumotlar {filename} ga yozildi"
+    @property
+    def title(self):
+        return self.__title
+    @title.setter
+    def title(self,new):
+        self.__title=new
+    @title.deleter
+    def title(self):
+        del self.__title
+
+    @property
+    def author(self):
+        return self.__author
+
+    @author.setter
+    def author(self,new):
+        self.__author=new
+    @author.deleter
+    def author(self):
+        del self.__author
+
+    @property
+    def isbn(self):
+        return self.__isbn
+
+    @isbn.setter
+    def isbn(self,new):
+        self.isbn=new
+
+    @isbn.deleter
+    def isbn(self):
+        del self.__isbn
+
+    @property
+    def page(self):
+        return self.__page_count
+    @page.setter
+    def page(self,new):
+        self.page=new
+
+class Ebook(Book):
+    def __init__(self,title,author,isbn,page_count,duration):
+        super().__init__(title,author,isbn,page_count)
+        self.duration=duration
+
+    def get_info(self):
+        return f" kitob malumotlari kitob nomi :{self.title}, kitob muallifi{self.author} kitob varoqlar soni: {self.page} kitob isbn {self.isbn}"
+
+    def read_page(self,num):
+        return f"siz shuncha {num} o'qidiz"
+
+    def bookmark_page(self,num):
+        return f"{num+26} bet qodi"
+
+    
+class AudioBook(Book):
+    def __init__(self, title, author, isbn, page_count, duration):
+        super().__init__(title, author, isbn, page_count)
+        self.duration = duration
+
+    def get_info(self):
+        return f"Kitob nomi: {self.title}, Muallifi: {self.author}, ISBN: {self.isbn}, Sahifa soni: {self.page}, Davomiyligi: {self.duration} soat"
+
+    def read_page(self, num):
+        return f"Siz {num}-sahifani o'qidiz"
+
+    def bookmark_page(self, num):
+        return f"{num + 1}-sahifaga belgi qo'yildi"
+
+    def play(self):
+        return f"{self.title} kitobi o'ynatilyapti, davomiyligi {self.duration} soat"
+
+    def save_to_json(self, filename):
+        data = {
+            'title': self.title,
+            'author': self.author,
+            'isbn': self.isbn,
+            'page_count': self.page,
+            'duration': self.duration
+        }
+        with open(filename, 'w') as f:
+            json.dump(data, f, indent=4)
+        return f"Ma'lumotlar {filename} ga yozildi"
+ebook = Ebook("Python O'rganish", "Isfandiyor", "1234567890", 350, 5)
+audiobook = AudioBook("Python Pro", "Isfandiyor", "0987654321", 450, 10)
+
+print(ebook.get_info())
+print(audiobook.get_info())
+
+ebook.save_to_json("ebook_data.json")
+audiobook.save_to_json("audiobook_data.json")
